@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from .models import User
 
@@ -13,8 +14,8 @@ class UserAdmin(BaseUserAdmin):
     list_display = [
         "pkid",
         "id",
-        "username",
         "email",
+        "username",
         "first_name",
         "last_name",
         "is_staff",
@@ -22,8 +23,8 @@ class UserAdmin(BaseUserAdmin):
     ]
     list_display_links = ["id", "email"]
     list_filter = [
-        "username",
         "email",
+        "username",
         "first_name",
         "last_name",
         "is_staff",
@@ -50,7 +51,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
         (
-            _("Permission and Groups"),
+            _("Permissions and Groups"),
             {
                 "fields": (
                     "is_active",
@@ -58,28 +59,17 @@ class UserAdmin(BaseUserAdmin):
                     "is_superuser",
                     "groups",
                     "user_permissions",
-                ),
+                )
             },
         ),
-        (
-            _("Important Dates"),
-            {
-                "fields": ("last_login", "date_joined"),
-            },
-        ),
+        (_("Important Dates"), {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
         (
             None,
             {
                 "classes": ("wide",),
-                "fields": (
-                    "email",
-                    "password1",
-                    "password2",
-                    "is_staff",
-                    "is_active",
-                ),
+                "fields": ("email", "password1", "password2", "is_staff", "is_active"),
             },
         ),
     )
