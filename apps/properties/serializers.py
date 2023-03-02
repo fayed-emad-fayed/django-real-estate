@@ -1,17 +1,22 @@
 from django_countries.serializer_fields import CountryField
 from django_countries.serializers import CountryFieldMixin
 from rest_framework import serializers
+
 from .models import Property, PropertyViews
 
 
 class PropertySerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     country = CountryField(name_only=True)
-    
+    cover_photo = serializers.SerializerMethodField()
+    profile_photo = serializers.SerializerMethodField()
+    photo1 = serializers.SerializerMethodField()
+    photo2 = serializers.SerializerMethodField()
+    photo3 = serializers.SerializerMethodField()
+    photo4 = serializers.SerializerMethodField()
+
     class Meta:
-        # model to serialize 
         model = Property
-        # fields you want to serialize
         fields = [
             "id",
             "user",
@@ -24,7 +29,7 @@ class PropertySerializer(serializers.ModelSerializer):
             "city",
             "postal_code",
             "street_address",
-            "property_number",
+            "property_num",
             "price",
             "tax",
             "final_property_price",
@@ -42,24 +47,38 @@ class PropertySerializer(serializers.ModelSerializer):
             "published_status",
             "views",
         ]
-    
+
     def get_user(self, obj):
         return obj.user.username
-    
 
-class PropertyCreateSerialzier(serializers.ModelSerializer):
+    def get_cover_photo(self, obj):
+        return obj.cover_photo.url
+
+    def get_photo1(self, obj):
+        return obj.photo1.url
+
+    def get_photo2(self, obj):
+        return obj.photo2.url
+
+    def get_photo3(self, obj):
+        return obj.photo3.url
+
+    def get_photo4(self, obj):
+        return obj.photo4.url
+
+    def get_profile_photo(self, obj):
+        return obj.user.profile.profile_photo.url
+
+
+class PropertyCreateSerializer(serializers.ModelSerializer):
     country = CountryField(name_only=True)
-    
+
     class Meta:
         model = Property
-        # excluded fields
         exclude = ["updated_at", "pkid"]
-        # fields variable by default will include all on it,
 
 
 class PropertyViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyViews
         exclude = ["updated_at", "pkid"]
-        
-    
