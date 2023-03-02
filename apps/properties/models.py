@@ -57,12 +57,12 @@ class Property(TimeStampedUUIDModel):
     photo3 = models.ImageField(default="/img1.jpg", null=True, blank=True)
     photo4 = models.ImageField(default="/img1.jpg", null=True, blank=True)
     published_status = models.BooleanField(verbose_name=_("Published Status"), default=False)
-    vies = models.IntegerField(verbose_name=_("Total views"), default=0.0)
+    views = models.IntegerField(verbose_name=_("Total views"), default=0.0)
     objects = models.Manager()
     published = PropertyPublishManager()
     
     def __str__(self):
-        return self.title()
+        return self.title
     
     class Meta:
         verbose_name = "Property"
@@ -71,7 +71,7 @@ class Property(TimeStampedUUIDModel):
     def save(self, *args, **kwargs):
         self.title = str.title(self.title)
         self.description = str.capitalize(self.description)
-        self.ref_code = "".join(random.choices(string.ascii_uppercase + str.digits, k=10))
+        self.ref_code = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
         super(Property, self).save(*args, *kwargs)
         
     @property
