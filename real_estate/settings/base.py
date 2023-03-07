@@ -1,11 +1,6 @@
 from datetime import timedelta
 from pathlib import Path
 
-import logging
-import logging.config
-
-from django.utils.log import DEFAULT_LOGGING
-
 import environ
 
 env = environ.Env(DEBUG=(bool, False))
@@ -177,14 +172,17 @@ DJOSER = {
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
     "SERIALIZERS": {
-        "user_create": "apps.users.serializers.CreateUserSerializer,",
+        "user_create": "apps.users.serializers.CreateUserSerializer",
         "user": "apps.users.serializers.UserSerializer",
         "current_user": "apps.users.serializers.UserSerializer",
         "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
 }
 
+import logging
+import logging.config
 
+from django.utils.log import DEFAULT_LOGGING
 
 logger = logging.getLogger(__name__)
 

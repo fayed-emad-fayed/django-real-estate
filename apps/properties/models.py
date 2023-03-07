@@ -9,18 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 
 from apps.common.models import TimeStampedUUIDModel
-
+from .managers import PropertyPublishedManager
 User = get_user_model()
-
-
-class PropertyPublishedManager(models.Manager):
-    def get_queryset(self):
-        return (
-            super(PropertyPublishedManager, self)
-            .get_queryset()
-            .filter(published_status=True)
-        )
-
 
 class Property(TimeStampedUUIDModel):
     class AdvertType(models.TextChoices):
@@ -44,6 +34,7 @@ class Property(TimeStampedUUIDModel):
     )
 
     title = models.CharField(verbose_name=_("Property Title"), max_length=250)
+    built_date = models.DateField(verbose_name=_("Property Built Date"), blank=True, null=True)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     ref_code = models.CharField(
         verbose_name=_("Property Reference Code"),

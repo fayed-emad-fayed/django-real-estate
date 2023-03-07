@@ -9,7 +9,7 @@ class ProfileJSONRenderer(JSONRenderer):
     def render(self, data, accepted_media_types=None, renderer_context=None):
         errors = data.get("errors", None)
 
-        if errors is not None:
+        if errors:
             return super(ProfileJSONRenderer, self).render(data)
 
         return json.dumps({"profile": data})
