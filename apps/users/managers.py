@@ -17,9 +17,8 @@ class CustomUserManager(BaseUserManager):
     def create_user(
         self, username, first_name, last_name, email, password, **extra_fields
     ):
-        if not user                                                                                                                                                                                                                                name:
+        if not username:
             raise UsernameFieldRequired()
-
         if not first_name:
             raise FirstNameFieldRequired()
 
