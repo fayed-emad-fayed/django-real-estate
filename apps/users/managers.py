@@ -3,8 +3,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 
+from .exceptions import UsernameFieldRequired, FirstNameFieldRequired, EmailFieldRequired, LastNameFieldRequired
+
 
 class CustomUserManager(BaseUserManager):
+    @classmethod
     def email_validator(self, email):
         try:
             validate_email(email)
@@ -14,20 +17,20 @@ class CustomUserManager(BaseUserManager):
     def create_user(
         self, username, first_name, last_name, email, password, **extra_fields
     ):
-        if not username:
-            raise ValueError(_("Users must submit a username"))
+        if not user                                                                                                                                                                                                                                name:
+            raise UsernameFieldRequired()
 
         if not first_name:
-            raise ValueError(_("Users must submit a first name"))
+            raise FirstNameFieldRequired()
 
         if not last_name:
-            raise ValueError(_("Users must submit a last name"))
+            raise LastNameFieldRequired()
 
         if email:
             email = self.normalize_email(email)
             self.email_validator(email)
         else:
-            raise ValueError(_("Base User Account: An email address is required"))
+            raise EmailFieldRequired()
 
         user = self.model(
             username=username,
@@ -50,10 +53,10 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        if extra_fields.get("is_staff") is not True:
+        if not extra_fields.get("is_staff"):
             raise ValueError(_("Superusers must have is_staff=True"))
 
-        if extra_fields.get("is_superuser") is not True:
+        if not extra_fields.get("is_superuser"):
             raise ValueError(_("Superusers must have is_superuser=True"))
 
         if not password:

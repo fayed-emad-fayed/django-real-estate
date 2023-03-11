@@ -20,6 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+        # the fields that included in the response
         fields = [
             "id",
             "username",
@@ -40,6 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_last_name(self, obj):
         return obj.last_name.title()
+    
+    def get_full_name(self, obj):
+        return obj.first_name.title() + " " + obj.last_name.title()
 
     def to_representation(self, instance):
         representation = super(UserSerializer, self).to_representation(instance)

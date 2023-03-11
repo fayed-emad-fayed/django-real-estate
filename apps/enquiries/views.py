@@ -6,23 +6,24 @@ from rest_framework.response import Response
 from real_estate.settings.development import DEFAULT_FROM_EMAIL
 
 from .models import Enquiry
+from .serializers import EnquirySerializer
 
 
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
 def send_enquiry_email(request):
     data = request.data
-    try:
-        subject = data["subject"]
-        name = data["name"]
-        email = data["email"]
-        message = data["message"]
-        from_email = data["email"]
-        recipient_list = [DEFAULT_FROM_EMAIL]
-        
-        send_mail(subject, message, from_email, recipient_list, fail_silently=True)
-        enquiry = Enquiry(name=name, email=email, subject=subject, message=message)
-        enquiry.save()
-        return Response({"success": "Your Enquiry was successfully submitted"})
-    except:
-        return Response({"fail": "Your Enquiry was not sent. Please try again"})
+    print(data)
+    
+    serializer = EnquirySerializer(data)
+    
+    if serializer.is_valid():
+        enquiry = serializer.save()
+        send_mail(subject=enquiry.subject,
+                message=enquiry.message,
+                email=enquiry.email,
+                recipient_list=[DEFAULT_FROM_EMAIL],
+                fail_silently=True)
+
+        return Response({"success": "Your Enquiry was successfully submitted"}, status=201)
+    return Response({"fail": "Your Enquiry was failed submitted"})
